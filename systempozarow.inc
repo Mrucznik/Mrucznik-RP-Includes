@@ -87,8 +87,8 @@ public systempozarow_OnPlayerUpdate(playerid)
 			    		    DeleteFire(i);
 			    		    SendFamilyMessage(17, 0xFFFFFFAA, "--------[LOS SANTOS FIRE DEPARTMENT]--------");
     						SendFamilyMessage(17, 0xAA3333AA, "[RADIO] Centrala do LSFD: Po¿ar zosta³ ugaszony!");
-    						SendFamilyMessage(17, 0x33AA33AA, "[LSFD] Do sejfu frakcji wp³ywa 20 000$! [LSFD]");
-			    		    Sejf_Add(17, 20000);
+    						SendFamilyMessage(17, 0x33AA33AA, "[LSFD] Do sejfu frakcji wp³ywa 50 000$! [LSFD]");
+			    		    Sejf_Add(17, 50000);
 							CallRemoteFunction("OnFireDeath", "dd", i, playerid);
 			    		}
 					    else if(FireHealth[i] <= 0)
@@ -114,8 +114,8 @@ public systempozarow_OnPlayerUpdate(playerid)
 			    		    DeleteFire(i);
 			    		    SendFamilyMessage(17, 0xFFFFFFAA, "--------[LOS SANTOS FIRE DEPARTMENT]--------");
     						SendFamilyMessage(17, 0xAA3333AA, "[RADIO] Centrala: Po¿ar zosta³ ugaszony!");
-    						SendFamilyMessage(17, 0x33AA33AA, "[LSFD] Do sejfu frakcji wp³ywa 20 000$! [LSFD]");
-			    		    Sejf_Add(17, 20000);
+    						SendFamilyMessage(17, 0x33AA33AA, "[LSFD] Do sejfu frakcji wp³ywa 50 000$! [LSFD]");
+			    		    Sejf_Add(17, 50000);
 							CallRemoteFunction("OnFireDeath", "dd", i, playerid);
 			    		}
 					    else if(FireHealth[i] <= 0)
