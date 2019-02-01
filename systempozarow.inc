@@ -18,22 +18,36 @@ new
     Float:FirePos[MaxFire][3],
 	TotalFires = 0,
 	FireHealth[MaxFire],
-	FireHealthMax[MaxFire];
+	FireHealthMax[MaxFire],
+	//
+	SmokeObj[MaxFire],
+	FireSmoke[MaxFire];
 
 stock AddFire(Float:x, Float:y, Float:z, Health)
 {
     TotalFires++;
 	new ID = TotalFires;
-	FireObj[ID] = CreateObject(18689, x, y, z, 0, 0, 0.0);
+	FireObj[ID] = CreateObject(18689, x, y, z, 0, 0, 0.0, 150.0);
 	FirePos[ID][0] = x, FirePos[ID][1] = y, FirePos[ID][2] = z;
 	FireHealth[ID] = Health;
 	FireHealthMax[ID] = Health;
+	FireSmoke[ID] = 0;
 }
 stock DeleteFire(ID)
 {
 	DestroyObject(FireObj[ID]);
 	TotalFires--;
 	FirePos[ID][0] = 0, FirePos[ID][1] = 0, FirePos[ID][2] = 0;
+}
+forward EndSmoke(id);
+public EndSmoke(id)
+{
+	if(FireSmoke[id] == 1)
+	{
+		DestroyObject(SmokeObj[id]);
+		FireSmoke[id] = 0;
+	}
+	return 1;
 }
 stock DeleteAllFire()
 {
@@ -81,18 +95,31 @@ public systempozarow_OnPlayerUpdate(playerid)
  	        	    if(PlayerFaces(playerid, FirePos[i][0],  FirePos[i][1],  FirePos[i][2]+2, 1) && IsPlayerInRangeOfPoint(playerid, 10, FirePos[i][0],  FirePos[i][1],  FirePos[i][2]))
  	        		{
 			    		FireHealth[i]-=2;
-
+						if(FireSmoke[i] == 0)
+						{
+							FireSmoke[i]=1;
+							SmokeObj[i] = CreateObject(18716,  FirePos[i][0],  FirePos[i][1],  FirePos[i][2], 0, 0, 0.0);
+							SetTimerEx("EndSmoke", 500, false, "i", i);
+						}
 			    		if(FireHealth[i] <= 0 && TotalFires == 1)
 			    		{
+							if(FireSmoke[i] == 1)
+							{
+								DestroyObject(SmokeObj[i]);
+							}
 			    		    DeleteFire(i);
 			    		    SendFamilyMessage(17, 0xFFFFFFAA, "--------[LOS SANTOS FIRE DEPARTMENT]--------");
-    						SendFamilyMessage(17, 0xAA3333AA, "[RADIO] Centrala do LSFD: Po¿ar zosta³ ugaszony!");
-    						SendFamilyMessage(17, 0x33AA33AA, "[LSFD] Do sejfu frakcji wp³ywa 50 000$! [LSFD]");
+    						SendFamilyMessage(17, 0xAA3333AA, "[RADIO] Centrala do LSFD: PoÅ¼ar zostaÅ‚ ugaszony!");
+    						SendFamilyMessage(17, 0x33AA33AA, "[LSFD] Do sejfu frakcji wpÅ‚ywa 50 000$! [LSFD]");
 			    		    Sejf_Add(17, 50000);
 							CallRemoteFunction("OnFireDeath", "dd", i, playerid);
 			    		}
-					    else if(FireHealth[i] <= 0)
+					    if(FireHealth[i] <= 0 && TotalFires != 1)
 					    {
+							if(FireSmoke[i] == 1)
+							{
+								DestroyObject(SmokeObj[i]);
+							}
 							DeleteFire(i);
 							CallRemoteFunction("OnFireDeath", "dd", i, playerid);
 						}
@@ -109,17 +136,76 @@ public systempozarow_OnPlayerUpdate(playerid)
  	        	    if(PlayerFaces(playerid, FirePos[i][0],  FirePos[i][1],  FirePos[i][2], 5) && IsPlayerInRangeOfPoint(playerid, 20, FirePos[i][0],  FirePos[i][1],  FirePos[i][2]))
  	        		{
 			    		FireHealth[i]-=1;
+						if(FireSmoke[i] == 0)
+						{
+							FireSmoke[i]=1;
+							SmokeObj[i] = CreateObject(18716,  FirePos[i][0],  FirePos[i][1],  FirePos[i][2], 0, 0, 0.0);
+							SetTimerEx("EndSmoke", 500, false, "i", i);
+						}
 			    		if(FireHealth[i] <= 0 && TotalFires == 1)
 			    		{
+							if(FireSmoke[i] == 1)
+							{
+								DestroyObject(SmokeObj[i]);
+							}
 			    		    DeleteFire(i);
 			    		    SendFamilyMessage(17, 0xFFFFFFAA, "--------[LOS SANTOS FIRE DEPARTMENT]--------");
-    						SendFamilyMessage(17, 0xAA3333AA, "[RADIO] Centrala: Po¿ar zosta³ ugaszony!");
-    						SendFamilyMessage(17, 0x33AA33AA, "[LSFD] Do sejfu frakcji wp³ywa 50 000$! [LSFD]");
+    						SendFamilyMessage(17, 0xAA3333AA, "[RADIO] Centrala: PoÅ¼ar zostaÅ‚ ugaszony!");
+    						SendFamilyMessage(17, 0x33AA33AA, "[LSFD] Do sejfu frakcji wpÅ‚ywa 50 000$! [LSFD]");
 			    		    Sejf_Add(17, 50000);
 							CallRemoteFunction("OnFireDeath", "dd", i, playerid);
 			    		}
 					    else if(FireHealth[i] <= 0)
 					    {
+							if(FireSmoke[i] == 1)
+							{
+								DestroyObject(SmokeObj[i]);
+							}
+							DeleteFire(i);
+							CallRemoteFunction("OnFireDeath", "dd", i, playerid);
+						}
+					}
+				}
+			}
+		}
+	}
+	else if(Holding(KEY_HANDBRAKE))
+	{
+        if(GetPVarInt(playerid, "firehose_on") == 1)
+        {
+			
+            for(i = 0; i<MaxFire; i++)
+ 	    	{
+ 	        	if(IsValidFire(i))
+ 	        	{
+ 	        	    if(PlayerFaces(playerid, FirePos[i][0],  FirePos[i][1],  FirePos[i][2], 1) && IsPlayerInRangeOfPoint(playerid, 10, FirePos[i][0],  FirePos[i][1],  FirePos[i][2]))
+ 	        		{
+			    		FireHealth[i]-=2;
+						if(FireSmoke[i] == 0)
+						{
+							FireSmoke[i]=1;
+							SmokeObj[i] = CreateObject(18716,  FirePos[i][0],  FirePos[i][1],  FirePos[i][2], 0, 0, 0.0);
+							SetTimerEx("EndSmoke", 500, false, "i", i);
+						}
+			    		if(FireHealth[i] <= 0 && TotalFires == 1)
+			    		{
+							if(FireSmoke[i] == 1)
+							{
+								DestroyObject(SmokeObj[i]);
+							}
+			    		    DeleteFire(i);
+			    		    SendFamilyMessage(17, 0xFFFFFFAA, "--------[LOS SANTOS FIRE DEPARTMENT]--------");
+    						SendFamilyMessage(17, 0xAA3333AA, "[RADIO] Centrala do LSFD: PoÅ¼ar zostaÅ‚ ugaszony!");
+    						SendFamilyMessage(17, 0x33AA33AA, "[LSFD] Do sejfu frakcji wpÅ‚ywa 50 000$! [LSFD]");
+			    		    Sejf_Add(17, 50000);
+							CallRemoteFunction("OnFireDeath", "dd", i, playerid);
+			    		}
+					    else if(FireHealth[i] <= 0)
+					    {
+							if(FireSmoke[i] == 1)
+							{
+								DestroyObject(SmokeObj[i]);
+							}
 							DeleteFire(i);
 							CallRemoteFunction("OnFireDeath", "dd", i, playerid);
 						}
@@ -150,7 +236,18 @@ stock PlayerFaces(playerid, Float:x, Float:y, Float:z, Float:radius)
         GetPlayerCameraFrontVector(playerid, fx, fy, fz);
         return (radius >= DistanceCameraTargetToLocation(cx, cy, cz, x, y, z, fx, fy, fz));
 }
-
+IsAFireman(playerid)
+{
+	if(IsPlayerConnected(playerid))
+	{
+	    new skin = GetPlayerSkin(playerid);
+	    if(skin==277 || skin==278 || skin==279)
+		{
+		    return 1;
+		}
+	}
+	return 0;
+}
 public OnFire()
 {
 	new i,v,p;
@@ -160,7 +257,7 @@ public OnFire()
 		{
 			for(p = 0; p<MAX_PLAYERS; p++)
 			{
-				if(IsPlayerInRangeOfPoint(p, 2, FirePos[i][0], FirePos[i][1], FirePos[i][2]) && !IsPlayerInAnyVehicle(p) && (GetPlayerSkin(p) != 277 || GetPlayerSkin(p) != 278 || GetPlayerSkin(p) != 279))
+				if(IsPlayerInRangeOfPoint(p, 2, FirePos[i][0], FirePos[i][1], FirePos[i][2]) && !IsPlayerInAnyVehicle(p) && !IsAFireman(p))
 				{
 	  				new Float:HP;
 		    		GetPlayerHealth(p, HP);
@@ -169,7 +266,7 @@ public OnFire()
 			}
 			for(v = 0; v<MAX_VEHICLES; v++)
 			{
-				if(VehicleToPoint(5, v, FirePos[i][0], FirePos[i][1], FirePos[i][2]))
+				if(VehicleToPoint(5, v, FirePos[i][0], FirePos[i][1], FirePos[i][2]) && GetVehicleModel(v) != 407)
 				{
 					new Float:HP;
 		    		GetVehicleHealth(v, HP);
