@@ -1,3 +1,8 @@
+#if defined STRLIB_INC
+	#endinput
+#endif
+#define STRLIB_INC
+
 #include <a_samp>
 
 #if !defined STRLIB_BUFFER_SIZE
@@ -231,7 +236,7 @@ forward bool:strfromliteral(output[], const input[], &pos = 0, maxlength = sizeo
  * Returns:
  *   Nothing
  */
-forward strtoliteral(output[], const input[], maxlength = sizeof(output));
+forward strtoliteral(output[], const input[], maxlength = sizeof(output), bool:paranoid = true);
 
 /*
  * Convert an array to a string.
@@ -277,6 +282,28 @@ forward strtobin(output[], const input[], maxlength = sizeof(output));
 forward strcatmid(dest[], const source[], start = 0, end = -1, maxlength = sizeof(dest));
 
 /*
+ * UTF-8 encode a string. Characters above 127 will be encoded into
+ * two or more characters.
+ *
+ * Parameters:
+ *   dest[] - The output variable.
+ *   source[] - The string to encode.
+ *   maxlength - The size of "dest". Defaults to sizeof(dest).
+ */
+forward utf8encode(dest[], const source[], maxlength = sizeof(dest));
+
+/*
+ * UTF-8 decode a string. UTF-8 characters will be collapsed into single
+ * characters in the array.
+ *
+ * Parameters:
+ *   dest[] - The output variable.
+ *   source[] - The string to encode.
+ *   maxlength - The size of "dest". Defaults to sizeof(dest).
+ */
+forward utf8decode(dest[], const source[], maxlength = sizeof(dest));
+
+/*
  * Decode an encoded URL.
  *
  * Parameters:
@@ -303,12 +330,14 @@ forward ret_strfrombin(const input[], inputlength = sizeof(input));
 forward ret_strimplode(const glue[], ...);
 forward ret_strreplace(const string[], const search[], const replacement[], bool:ignorecase = false, pos = 0, limit = -1);
 forward ret_strfromliteral(const input[], &pos = 0);
-forward ret_strtoliteral(const input[]);
+forward ret_strtoliteral(const input[], bool:paranoid = true);
 forward ret_strtrim(const string[], const chars[] = !"", string_edges:edge = edge_both);
 forward ret_strpad(const string[], length, const substr[] = !" ", string_edges:edge = edge_both, bool:trim_first = true, const trim_chars[] = !"");
 forward ret_strwrap(const left[], const string[], const right[]);
 forward ret_strurldecode(const input[]);
 forward ret_strurlencode(const input[], bool:pack = false);
+forward ret_utf8encode(const input[]);
+forward ret_utf8decode(const input[]);
 
 // Return from native functions
 forward ret_strpack(const source[]);
@@ -443,12 +472,7 @@ static stock IsOverlapping(const str1[], size1 = sizeof(str1), const str2[], siz
 	#emit LOAD.S.pri  str2
 	#emit STOR.S.pri  addr2
 
-	if (addr2 <= addr1 < addr2 + size2)
-		return true;
-	else if (addr1 <= addr2 < addr1 + size1)
-		return true;
-	else
-		return false;
+	return (addr1 < addr2 + size2) && (addr2 < addr1 + size1);
 }
 
 // strlib functions
@@ -986,7 +1010,7 @@ return_true:
 	return ret;
 }
 
-stock strtoliteral(output[], const input[], maxlength = sizeof(output)) {
+stock strtoliteral(output[], const input[], maxlength = sizeof(output), bool:paranoid = true) {
 	new i, c, outlen, heap = 0;
 	
 	if (IsOverlapping(output, maxlength, input, -1))
@@ -1014,8 +1038,14 @@ stock strtoliteral(output[], const input[], maxlength = sizeof(output)) {
 			case '\n': strunpack(output[outlen], !"\\n" , 3), outlen += 2;
 			case '\t': strunpack(output[outlen], !"\\t" , 3), outlen += 2;
 			case '\v': strunpack(output[outlen], !"\\v" , 3), outlen += 2;
-
+			case '\\': strunpack(output[outlen], !"\\\\" , 3), outlen += 2;
+			
 			default: {
+				if (!paranoid && 0x80 <= c <= 0xFF) {
+					output[outlen++] = c;
+					continue;
+				}
+				
 				if (maxlength - outlen <= 8)
 					break;
 				
@@ -1245,6 +1275,137 @@ stock strcatmid(dest[], const source[], start = 0, end = -1, maxlength = sizeof(
 		RestoreHeapToAddress(heap);
 }
 
+stock utf8encode(dest[], const source[], maxlength = sizeof(dest)) {
+	new heap = 0;
+	
+	if (IsOverlapping(dest, maxlength, source, -1)) {
+		heap = CopyArgumentToHeap(1);
+	}
+	
+	new len = strlen(source);
+	new packed = ispacked(source);
+	
+	dest[0] = '\0';
+	
+	new idx = 0;
+	
+	for (new i = 0; i < len; i++) {
+		new c = packed ? source{i} : source[i];
+		
+		if (c >= 0x80) {
+			if (c > 0x4000000) {
+				// 6 byte
+				dest[idx++] = 0b11111100 | ((c >>> 30) & 0b00000001);
+				dest[idx++] = 0b10000000 | ((c >>> 24) & 0b00111111);
+				dest[idx++] = 0b10000000 | ((c >>> 18) & 0b00111111);
+				dest[idx++] = 0b10000000 | ((c >>> 12) & 0b00111111);
+				dest[idx++] = 0b10000000 | ((c >>> 6) & 0b00111111);
+				dest[idx++] = 0b10000000 | (c & 0b00111111);
+			} else if (c > 0x200000) {
+				// 5 byte
+				dest[idx++] = 0b11111000 | ((c >>> 24) & 0b00000011);
+				dest[idx++] = 0b10000000 | ((c >>> 18) & 0b00111111);
+				dest[idx++] = 0b10000000 | ((c >>> 12) & 0b00111111);
+				dest[idx++] = 0b10000000 | ((c >>> 6) & 0b00111111);
+				dest[idx++] = 0b10000000 | (c & 0b00111111);
+			} else if (c > 0x10000) {
+				// 4 byte
+				dest[idx++] = 0b11110000 | ((c >>> 18) & 0b00000111);
+				dest[idx++] = 0b10000000 | ((c >>> 12) & 0b00111111);
+				dest[idx++] = 0b10000000 | ((c >>> 6) & 0b00111111);
+				dest[idx++] = 0b10000000 | (c & 0b00111111);
+			} else if (c > 0x800) {
+				// 3 byte
+				dest[idx++] = 0b11100000 | ((c >>> 12) & 0b00001111);
+				dest[idx++] = 0b10000000 | ((c >>> 6) & 0b00111111);
+				dest[idx++] = 0b10000000 | (c & 0b00111111);
+			} else {
+				// 2 byte
+				dest[idx++] = 0b11000000 | ((c >>> 6) & 0b00011111);
+				dest[idx++] = 0b10000000 | (c & 0b00111111);
+				
+			}
+		} else if (c > 0) {
+			dest[idx++] = c;
+		}
+	}
+	
+	dest[idx++] = '\0';
+	
+	if (heap) {
+		RestoreHeapToAddress(heap);
+	}
+}
+
+stock utf8decode(dest[], const source[], maxlength = sizeof(dest)) {
+	new heap = 0;
+	
+	if (IsOverlapping(dest, maxlength, source, -1)) {
+		heap = CopyArgumentToHeap(1);
+	}
+	
+	new len = strlen(source);
+	
+	dest[0] = '\0';
+	
+	new idx = 0;
+	
+	for (new i = 0; i < len; i++) {
+		new c = source[i];
+		
+		if (c & 0b10000000) {
+			if (c & 0b11100000 == 0b11000000) {
+				// 2 byte
+				if (i + 1 >= len) continue;
+				
+				dest[idx++] = (c & 0b00011111) << 6 | (source[++i] & 0b00111111);
+			} else if (c & 0b11110000 == 0b11100000) {
+				// 3 byte
+				if (i + 2 >= len) continue;
+				
+				dest[idx++] = (c & 0b00001111) << 12 |
+				              (source[++i] & 0b00111111) << 6 |
+				              (source[++i] & 0b00111111);
+			} else if (c & 0b11111000 == 0b11110000) {
+				// 4 byte
+				if (i + 3 >= len) continue;
+				
+				dest[idx++] = (c & 0b00000111) << 18 |
+				              (source[++i] & 0b00111111) << 12 |
+				              (source[++i] & 0b00111111) << 6 |
+				              (source[++i] & 0b00111111);
+			} else if (c & 0b11111100 == 0b11111000) {
+				// 5 byte
+				if (i + 4 >= len) continue;
+				
+				dest[idx++] = (c & 0b00000011) << 24 |
+				              (source[++i] & 0b00111111) << 18 |
+				              (source[++i] & 0b00111111) << 12 |
+				              (source[++i] & 0b00111111) << 6 |
+				              (source[++i] & 0b00111111);
+			} else if (c & 0b11111110 == 0b11111100) {
+				// 6 byte
+				if (i + 5 >= len) continue;
+				
+				dest[idx++] = (c & 0b00000001) << 30 |
+				              (source[++i] & 0b00111111) << 24 |
+				              (source[++i] & 0b00111111) << 18 |
+				              (source[++i] & 0b00111111) << 12 |
+				              (source[++i] & 0b00111111) << 6 |
+				              (source[++i] & 0b00111111);
+			}
+		} else {
+			dest[idx++] = c;
+		}
+	}
+	
+	dest[idx++] = 0;
+	
+	if (heap) {
+		RestoreHeapToAddress(heap);
+	}
+}
+
 
 stock ret_strcatmid(const string[], const source[], start = 0, end = -1) {
 	new output[STRLIB_RETURN_SIZE];
@@ -1333,12 +1494,12 @@ stock ret_strfromliteral(const input[], &pos = 0) {
 	return output;
 }
 
-stock ret_strtoliteral(const input[]) {
+stock ret_strtoliteral(const input[], bool:paranoid = true) {
 	new output[STRLIB_RETURN_SIZE];
 	
 	strcat(output, input);
 	
-	strtoliteral(output, input);
+	strtoliteral(output, input, paranoid);
 	
 	return output;
 }
@@ -1389,6 +1550,22 @@ stock ret_strurlencode(const input[], bool:pack = false) {
 	strcat(output, input);
 	
 	strurlencode(output, input, _, pack);
+	
+	return output;
+}
+
+stock ret_utf8encode(const input[]) {
+	new output[STRLIB_RETURN_SIZE];
+	
+	utf8encode(output, input);
+	
+	return output;
+}
+
+stock ret_utf8decode(const input[]) {
+	new output[STRLIB_RETURN_SIZE];
+	
+	utf8decode(output, input);
 	
 	return output;
 }
