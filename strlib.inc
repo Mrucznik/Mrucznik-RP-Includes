@@ -1291,7 +1291,6 @@ stock utf8encode(dest[], const source[], maxlength = sizeof(dest)) {
 	
 	for (new i = 0; i < len; i++) {
 		new c = packed ? source{i} : source[i];
-		
 		if (c >= 0x80) {
 			if (c > 0x4000000) {
 				// 6 byte
@@ -1376,14 +1375,7 @@ stock utf8decode(dest[], const source[], maxlength = sizeof(dest)) {
 				// 2 byte
 				if (i + 1 >= len) continue;
 				new d = source[++i];
-				if(c == 195){
-					switch(d){
-						case 147: dest[idx++] = 211;
-						case 179: dest[idx++] = 243;
-						default: dest[idx++] = (c & 0b00011111) << 6 | (source[++i] & 0b00111111);
-					}
-				}
-				else if(c == 196)
+				if(c == 196)
 				{
 					switch(d){
 						case 132: dest[idx++] = 165;
@@ -1392,7 +1384,7 @@ stock utf8decode(dest[], const source[], maxlength = sizeof(dest)) {
 						case 133: dest[idx++] = 185;
 						case 135: dest[idx++] = 230;
 						case 153: dest[idx++] = 234;
-						default: dest[idx++] = (c & 0b00011111) << 6 | (source[++i] & 0b00111111);
+						default: dest[idx++] = (c & 0b00011111) << 6 | (d & 0b00111111);
 					}
 				}
 				else if(c == 197){
@@ -1407,10 +1399,10 @@ stock utf8decode(dest[], const source[], maxlength = sizeof(dest)) {
 						case 155: dest[idx++] = 156;
 						case 186: dest[idx++] = 159;
 						case 188: dest[idx++] = 191;
-						default: dest[idx++] = (c & 0b00011111) << 6 | (source[++i] & 0b00111111);
+						default: dest[idx++] = (c & 0b00011111) << 6 | (d & 0b00111111);
 					}
 				}
-				else dest[idx++] = (c & 0b00011111) << 6 | (source[++i] & 0b00111111);
+				else dest[idx++] = (c & 0b00011111) << 6 | (d & 0b00111111);
 			} else if (c & 0b11110000 == 0b11100000) {
 				// 3 byte
 				if (i + 2 >= len) continue;
