@@ -1321,6 +1321,24 @@ stock utf8encode(dest[], const source[], maxlength = sizeof(dest)) {
 				dest[idx++] = 0b10000000 | (c & 0b00111111);
 			} else {
 				// 2 byte
+				switch(c){
+					case 165: c = 260;
+					case 198: c = 262;
+					case 202: c = 280;
+					case 163: c = 321;
+					case 209: c = 323;
+					case 140: c = 346;
+					case 143: c = 377;
+					case 175: c = 379;
+					case 185: c = 261;
+					case 230: c = 263;
+					case 234: c = 281;
+					case 179: c = 322;
+					case 241: c = 324;
+					case 156: c = 347;
+					case 159: c = 378;
+					case 191: c = 380;
+				}
 				dest[idx++] = 0b11000000 | ((c >>> 6) & 0b00011111);
 				dest[idx++] = 0b10000000 | (c & 0b00111111);
 				
@@ -1357,8 +1375,42 @@ stock utf8decode(dest[], const source[], maxlength = sizeof(dest)) {
 			if (c & 0b11100000 == 0b11000000) {
 				// 2 byte
 				if (i + 1 >= len) continue;
-				
-				dest[idx++] = (c & 0b00011111) << 6 | (source[++i] & 0b00111111);
+				new d = source[++i];
+				if(c == 195){
+					switch(d){
+						case 147: dest[idx++] = 211;
+						case 179: dest[idx++] = 243;
+						default: dest[idx++] = (c & 0b00011111) << 6 | (source[++i] & 0b00111111);
+					}
+				}
+				else if(c == 196)
+				{
+					switch(d){
+						case 132: dest[idx++] = 165;
+						case 134: dest[idx++] = 198;
+						case 152: dest[idx++] = 202;
+						case 133: dest[idx++] = 185;
+						case 135: dest[idx++] = 230;
+						case 153: dest[idx++] = 234;
+						default: dest[idx++] = (c & 0b00011111) << 6 | (source[++i] & 0b00111111);
+					}
+				}
+				else if(c == 197){
+					switch(d){
+						case 129: dest[idx++] = 163;
+						case 131: dest[idx++] = 209;
+						case 154: dest[idx++] = 140;
+						case 185: dest[idx++] = 143;
+						case 187: dest[idx++] = 175;
+						case 130: dest[idx++] = 179;
+						case 132: dest[idx++] = 241;
+						case 155: dest[idx++] = 156;
+						case 186: dest[idx++] = 159;
+						case 188: dest[idx++] = 191;
+						default: dest[idx++] = (c & 0b00011111) << 6 | (source[++i] & 0b00111111);
+					}
+				}
+				else dest[idx++] = (c & 0b00011111) << 6 | (source[++i] & 0b00111111);
 			} else if (c & 0b11110000 == 0b11100000) {
 				// 3 byte
 				if (i + 2 >= len) continue;
