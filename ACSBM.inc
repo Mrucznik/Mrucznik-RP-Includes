@@ -5,13 +5,16 @@
 
 #include <a_samp>
 #include <crashdetect>
+#include <log-plugin>
 //#pragma tabsize 0
 
 new kaska[MAX_PLAYERS];
+new Logger:dajkaseLog;
 
 forward Ac_OnGameModeInit();
 public Ac_OnGameModeInit()//anty cheat
 {
+	dajkaseLog = CreateLog("logi/dajkase");
 	SetTimer("AntyCheatSystemByMrucznik", 1000, 1);
 	return 1;
 }
@@ -43,12 +46,16 @@ public AntyCheatSystemByMrucznik()
 forward DajKase(playerid,pieniadze);
 public DajKase(playerid,pieniadze)
 {
+	new logstring[256], nickbrusz[MAX_PLAYER_NAME];
+	GetPlayerName(playerid, nickbrusz, sizeof(nickbrusz));
+	format(logstring, sizeof(logstring), "%s dostal %d$", nickbrusz, pieniadze);
+	Log(dajkaseLog, INFO, logstring);
+
 	kaska[playerid]+=pieniadze;
 	GivePlayerMoney(playerid,pieniadze);
 	if(kaska[playerid] < -10000000)
 	{
-		new st23r[256], nickbrusz[MAX_PLAYER_NAME];
-		GetPlayerName(playerid, nickbrusz, sizeof(nickbrusz));
+		new st23r[256];
 		SendClientMessage(playerid, 0xFF0000FF, "Zosta³eœ zbanowany!");
 		format(st23r, sizeof(st23r), "%s mial mniej niz -10 000 000", nickbrusz);
 		new entry[256];
@@ -72,6 +79,11 @@ public DajKase(playerid,pieniadze)
 forward ZabierzKase(playerid, money);
 public ZabierzKase(playerid, money)
 {
+	new logstring[256], nick[MAX_PLAYER_NAME];
+	GetPlayerName(playerid, nick, sizeof(nick));
+	format(logstring, sizeof(logstring), "%s zabrano %d$", nick, money);
+	Log(dajkaseLog, INFO, logstring);
+
 	if(money <= 0)
 	{
 		printf("ERROR: funkcja ZabierzKase miala ujemna wartosc dla playerid: %s[%d] Wartosc: %d", GetNick(playerid), playerid, money);
