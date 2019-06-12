@@ -67,10 +67,9 @@ public DajKase(playerid,pieniadze)
 		Ban(playerid);
 	}
 	
-	if(pieniadze >= 0)
+	if(pieniadze < 0)
 	{
-		printf("ERROR: funkcja DajKase miala ujemna wartosc dla playerid: %s[%d] Wartosc: %d", GetNick(playerid), playerid, pieniadze);
-		//PrintBacktrace();
+		Log(dajkaseLog, ERROR, logstring);
 		return 1;
 	}
 	return 1;
@@ -84,10 +83,9 @@ public ZabierzKase(playerid, money)
 	format(logstring, sizeof(logstring), "%s zabrano %d$", nick, money);
 	Log(dajkaseLog, INFO, logstring);
 
-	if(money <= 0)
+	if(money > 0)
 	{
-		printf("ERROR: funkcja ZabierzKase miala ujemna wartosc dla playerid: %s[%d] Wartosc: %d", GetNick(playerid), playerid, money);
-		//PrintBacktrace();
+		Log(dajkaseLog, ERROR, logstring);
 		return 1;
 	}
 	kaska[playerid] -= money;
