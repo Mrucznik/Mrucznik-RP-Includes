@@ -70,7 +70,6 @@ public DajKase(playerid,pieniadze)
 	if(pieniadze < 0)
 	{
 		Log(dajkaseLog, ERROR, logstring);
-		return 1;
 	}
 	return 1;
 }
@@ -83,10 +82,9 @@ public ZabierzKase(playerid, money)
 	format(logstring, sizeof(logstring), "%s zabrano %d$", nick, money);
 	Log(dajkaseLog, INFO, logstring);
 
-	if(money > 0)
+	if(money < 0)
 	{
 		Log(dajkaseLog, ERROR, logstring);
-		return 1;
 	}
 	kaska[playerid] -= money;
 	GivePlayerMoney(playerid, -money);
