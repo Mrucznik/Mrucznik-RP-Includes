@@ -49,10 +49,40 @@ public DajKase(playerid,pieniadze)
 	new logstring[256], nickbrusz[MAX_PLAYER_NAME];
 	GetPlayerName(playerid, nickbrusz, sizeof(nickbrusz));
 	format(logstring, sizeof(logstring), "%s dostal %d$", nickbrusz, pieniadze);
-	Log(dajkaseLog, INFO, logstring);
 
 	kaska[playerid]+=pieniadze;
 	GivePlayerMoney(playerid,pieniadze);
+	
+	if(pieniadze < 0)
+	{
+		Log(dajkaseLog, ERROR, logstring);
+	}
+	else
+	{
+		Log(dajkaseLog, INFO, logstring);
+	}
+	return 1;
+}
+
+forward ZabierzKase(playerid, money);
+public ZabierzKase(playerid, money)
+{
+	new logstring[256], nick[MAX_PLAYER_NAME];
+	GetPlayerName(playerid, nick, sizeof(nick));
+	format(logstring, sizeof(logstring), "%s zabrano %d$", nick, money);
+
+	kaska[playerid] -= money;
+	GivePlayerMoney(playerid, -money);
+	
+	if(money < 0)
+	{
+		Log(dajkaseLog, ERROR, logstring);
+	}
+	else
+	{
+		Log(dajkaseLog, INFO, logstring);
+	}
+
 	if(kaska[playerid] < -10000000)
 	{
 		new st23r[256];
@@ -66,28 +96,6 @@ public DajKase(playerid,pieniadze)
 		fclose(hFile);
 		Ban(playerid);
 	}
-	
-	if(pieniadze < 0)
-	{
-		Log(dajkaseLog, ERROR, logstring);
-	}
-	return 1;
-}
-
-forward ZabierzKase(playerid, money);
-public ZabierzKase(playerid, money)
-{
-	new logstring[256], nick[MAX_PLAYER_NAME];
-	GetPlayerName(playerid, nick, sizeof(nick));
-	format(logstring, sizeof(logstring), "%s zabrano %d$", nick, money);
-	Log(dajkaseLog, INFO, logstring);
-
-	if(money < 0)
-	{
-		Log(dajkaseLog, ERROR, logstring);
-	}
-	kaska[playerid] -= money;
-	GivePlayerMoney(playerid, -money);
 	return 1;
 }
 
