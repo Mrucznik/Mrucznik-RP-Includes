@@ -46,9 +46,9 @@ public AntyCheatSystemByMrucznik()
 forward DajKase(playerid,pieniadze);
 public DajKase(playerid,pieniadze)
 {
-	new logstring[256], nickbrusz[MAX_PLAYER_NAME];
-	GetPlayerName(playerid, nickbrusz, sizeof(nickbrusz));
-	format(logstring, sizeof(logstring), "%s dostal %d$", nickbrusz, pieniadze);
+	new logstring[256], nick[MAX_PLAYER_NAME];
+	GetPlayerName(playerid, nick, sizeof(nick));
+	format(logstring, sizeof(logstring), "%s dostal %d$", nick, pieniadze);
 
 	kaska[playerid]+=pieniadze;
 	GivePlayerMoney(playerid,pieniadze);
@@ -87,7 +87,7 @@ public ZabierzKase(playerid, money)
 	{
 		new st23r[256];
 		SendClientMessage(playerid, 0xFF0000FF, "Zosta³eœ zbanowany!");
-		format(st23r, sizeof(st23r), "%s mial mniej niz -10 000 000", nickbrusz);
+		format(st23r, sizeof(st23r), "%s mial mniej niz -10 000 000", nick);
 		new entry[256];
 		format(entry, sizeof(entry), "%s\n",st23r);
 		new File:hFile;
