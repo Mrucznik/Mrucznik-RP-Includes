@@ -88,6 +88,7 @@ public ZabierzKase(playerid, money)
 		new st23r[256];
 		SendClientMessage(playerid, 0xFF0000FF, "Zosta³eœ zbanowany!");
 		format(st23r, sizeof(st23r), "%s mial mniej niz -10 000 000", nick);
+		print(st23r);
 		new entry[256];
 		format(entry, sizeof(entry), "%s\n",st23r);
 		new File:hFile;
