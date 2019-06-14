@@ -82,21 +82,6 @@ public ZabierzKase(playerid, money)
 	{
 		Log(dajkaseLog, INFO, logstring);
 	}
-
-	if(kaska[playerid] < -10000000)
-	{
-		new st23r[256];
-		SendClientMessage(playerid, 0xFF0000FF, "Zosta³eœ zbanowany!");
-		format(st23r, sizeof(st23r), "%s mial mniej niz -10 000 000", nick);
-		print(st23r);
-		new entry[256];
-		format(entry, sizeof(entry), "%s\n",st23r);
-		new File:hFile;
-		hFile = fopen("ban.log", io_append);
-		fwrite(hFile, entry);
-		fclose(hFile);
-		Ban(playerid);
-	}
 	return 1;
 }
 
