@@ -85,6 +85,21 @@ public ZabierzKase(playerid, money)
 	return 1;
 }
 
+forward UstawKase(playerid, money);
+public UstawKase(playerid, money)
+{
+	new logstring[256], nick[MAX_PLAYER_NAME];
+	GetPlayerName(playerid, nick, sizeof(nick));
+	format(logstring, sizeof(logstring), "%s ustawiono %d$", nick, money);
+
+	kaska[playerid] = money;
+	ResetPlayerMoney(playerid);
+	GivePlayerMoney(playerid, money);
+	
+	Log(dajkaseLog, INFO, logstring);
+	return 1;
+}
+
 forward ResetujKase(playerid);
 public ResetujKase(playerid)
 {
