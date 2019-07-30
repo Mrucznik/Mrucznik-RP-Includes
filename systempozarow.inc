@@ -108,10 +108,10 @@ public systempozarow_OnPlayerUpdate(playerid)
 								DestroyObject(SmokeObj[i]);
 							}
 			    		    DeleteFire(i);
-			    		    SendFamilyMessage(17, 0xFFFFFFAA, "--------[LOS SANTOS FIRE DEPARTMENT]--------");
-    						SendFamilyMessage(17, 0xAA3333AA, "[RADIO] Centrala do LSFD: Po≈ºar zosta≈Ç ugaszony!");
-    						SendFamilyMessage(17, 0x33AA33AA, "[LSFD] Do sejfu frakcji wp≈Çywa 50 000$! [LSFD]");
-			    		    Sejf_Add(17, 50000);
+			    		    SendFamilyMessage(17, 0xFFFFFFAA, "--------[Emergency Rescue Service]--------");
+    						SendFamilyMessage(17, 0xAA3333AA, "[RADIO] Centrala do ERS: Poøar zosta≥Ç ugaszony!");
+    						SendFamilyMessage(17, 0x33AA33AA, "[ERS] Do sejfu frakcji wp≥ywa 80 000$! [ERS]");
+			    		    Sejf_Add(4, 80000);
 							CallRemoteFunction("OnFireDeath", "dd", i, playerid);
 			    		}
 					    if(FireHealth[i] <= 0 && TotalFires != 1)
@@ -149,10 +149,10 @@ public systempozarow_OnPlayerUpdate(playerid)
 								DestroyObject(SmokeObj[i]);
 							}
 			    		    DeleteFire(i);
-			    		    SendFamilyMessage(17, 0xFFFFFFAA, "--------[LOS SANTOS FIRE DEPARTMENT]--------");
-    						SendFamilyMessage(17, 0xAA3333AA, "[RADIO] Centrala: Po≈ºar zosta≈Ç ugaszony!");
-    						SendFamilyMessage(17, 0x33AA33AA, "[LSFD] Do sejfu frakcji wp≈Çywa 50 000$! [LSFD]");
-			    		    Sejf_Add(17, 50000);
+			    		    SendFamilyMessage(17, 0xFFFFFFAA, "--------[Emergency Rescue Service]--------");
+    						SendFamilyMessage(17, 0xAA3333AA, "[RADIO] Centrala do ERS: Poøar zosta≥Ç ugaszony!");
+    						SendFamilyMessage(17, 0x33AA33AA, "[ERS] Do sejfu frakcji wp≥ywa 80 000$! [ERS]");
+			    		    Sejf_Add(4, 80000);
 							CallRemoteFunction("OnFireDeath", "dd", i, playerid);
 			    		}
 					    else if(FireHealth[i] <= 0)
@@ -194,10 +194,10 @@ public systempozarow_OnPlayerUpdate(playerid)
 								DestroyObject(SmokeObj[i]);
 							}
 			    		    DeleteFire(i);
-			    		    SendFamilyMessage(17, 0xFFFFFFAA, "--------[LOS SANTOS FIRE DEPARTMENT]--------");
-    						SendFamilyMessage(17, 0xAA3333AA, "[RADIO] Centrala do LSFD: Po≈ºar zosta≈Ç ugaszony!");
-    						SendFamilyMessage(17, 0x33AA33AA, "[LSFD] Do sejfu frakcji wp≈Çywa 50 000$! [LSFD]");
-			    		    Sejf_Add(17, 50000);
+			    		    SendFamilyMessage(17, 0xFFFFFFAA, "--------[Emergency Rescue Service]--------");
+    						SendFamilyMessage(17, 0xAA3333AA, "[RADIO] Centrala do ERS: Poøar zosta≥Ç ugaszony!");
+    						SendFamilyMessage(17, 0x33AA33AA, "[ERS] Do sejfu frakcji wp≥ywa 80 000$! [ERS]");
+			    		    Sejf_Add(4, 80000);
 							CallRemoteFunction("OnFireDeath", "dd", i, playerid);
 			    		}
 					    else if(FireHealth[i] <= 0)
