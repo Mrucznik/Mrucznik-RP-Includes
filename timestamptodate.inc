@@ -7,6 +7,10 @@ native TimestampToDate(Timestamp, &year, &month, &day, &hour, &minute, &second, 
 native DateToTimestamp(str[11]);
 */
 
+
+#include <a_samp>
+#include <sscanf2>
+
 #define SPLITTER .
 
 new MonthTimes[12][4] = 
@@ -111,3 +115,4 @@ stock DateToTimestamp(str[11])
 	}
 	else return -1;
 }
+
