@@ -86,7 +86,7 @@ stock TimestampToDate(Timestamp, &year, &month, &day, &hour, &minute, &second, H
 		hour -= 24;
 		day ++;
 	}	
-	if(day > MonthTimes[month][IsLeapYear(year)])
+	if(day > MonthTimes[month-1][IsLeapYear(year)])
 	{
 		day = 1;
 		month ++;
@@ -110,7 +110,7 @@ stock DateToTimestamp(str[11])
 		else tmp = ((date[2] - 1968) / 4 - 1);
 		total += tmp * 31622400;
 		total += (date[2] - 1970 - tmp) * 31536000;
-		for(new i = 1; i < date[1]; i ++) total += MonthTimes[i][0 + IsLeapYear(date[2])] * 86400;
+		for(new i = 1; i < date[1]; i ++) total += MonthTimes[i-1][0 + IsLeapYear(date[2])] * 86400;
 		return total;
 	}
 	else return -1;
