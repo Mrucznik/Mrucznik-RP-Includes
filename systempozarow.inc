@@ -1,4 +1,5 @@
 #include <a_samp>
+#include <YSI\y_hooks>
 
 #define Holding(%0) \
 	((newkeys & (%0)) == (%0))
@@ -248,29 +249,42 @@ IsAFireman(playerid)
 	}
 	return 0;
 }
+
+//optymalizacje
+new LastFireVehicles[MAX_VEHICLES];
+hook OnVehicleDeath(vehicleid, killerid)
+{
+	LastFireVehicles[vehicleid] = false;
+	return 1;
+}
+
 public OnFire()
 {
-	new i,v,p;
-	for(i = 0; i<MaxFire; i++)
+	for(new i = 0; i<MaxFire; i++)
 	{
 		if(IsValidFire(i))
 		{
-			for(p = 0; p<MAX_PLAYERS; p++)
+			foreach(new p : Player)
 			{
-				if(IsPlayerInRangeOfPoint(p, 2, FirePos[i][0], FirePos[i][1], FirePos[i][2]) && !IsPlayerInAnyVehicle(p) && !IsAFireman(p))
+				if(IsPlayerInAnyVehicle(p))
+				{
+					LastFireVehicles[GetPlayerVehicleID(p)] = false;
+				}
+				else if(!IsAFireman(p) && IsPlayerInRangeOfPoint(p, 2, FirePos[i][0], FirePos[i][1], FirePos[i][2]))
 				{
 	  				new Float:HP;
 		    		GetPlayerHealth(p, HP);
 	  				SetPlayerHealth(p, HP-4);
 				}	
 			}
-			for(v = 0; v<MAX_VEHICLES; v++)
+			for(new v = 0; v < MAX_VEHICLES; v++)
 			{
-				if(VehicleToPoint(5, v, FirePos[i][0], FirePos[i][1], FirePos[i][2]) && GetVehicleModel(v) != 407)
+				if(LastFireVehicles[v] || (IsValidVehicle(v) && GetVehicleModel(v) != 407 && GetVehicleDistanceFromPoint(v, FirePos[i][0], FirePos[i][1], FirePos[i][2]) < 5.0))
 				{
 					new Float:HP;
-		    		GetVehicleHealth(v, HP);
-	  				SetVehicleHealth(v, HP-30);
+					GetVehicleHealth(v, HP);
+					SetVehicleHealth(v, HP-30);
+					LastFireVehicles[v] = true;
 				}
 			}
 		}
