@@ -134,8 +134,7 @@ native DOF2_GetCaseSensitivity ();
 #if !defined private
 	#define private 		static stock
 #endif
-	
-#pragma dynamic 65536
+
 
 /*
 #define MAX_SECTION_TAG        (32)

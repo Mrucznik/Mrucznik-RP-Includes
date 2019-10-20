@@ -7,6 +7,10 @@
 
 #include <a_samp>
 
+#if defined _inc_y_hooks || defined _INC_y_hooks
+	#include <YSI\y_hooks>
+#endif
+
 #if !defined FILTERSCRIPT
 
 #if !defined DEBUG
