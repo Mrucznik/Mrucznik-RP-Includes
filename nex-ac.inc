@@ -6511,8 +6511,7 @@ public OnPlayerUpdate(playerid)
 				#endif
 				{
 					ac_t = GetPlayerTeam(playerid);
-					//if(ac_t == NO_TEAM || ac_t != GetPlayerTeam(hitid)) - old
-					if(ac_t == 1 || ac_t != GetPlayerTeam(hitid))
+					if(ac_t == NO_TEAM || ac_t != GetPlayerTeam(hitid)) - old
 					{
 						#if AC_USE_RESTAURANTS || AC_USE_AMMUNATIONS || AC_USE_CASINOS
 							ac_i = GetPlayerInterior(hitid);
@@ -6557,8 +6556,7 @@ public OnPlayerUpdate(playerid)
 					#endif
 					{
 						ac_t = GetPlayerTeam(playerid);
-						//if(!ac_VehFriendlyFire || ac_t == NO_TEAM || ac_t != GetPlayerTeam(ac_i)) - old
-						if(!ac_VehFriendlyFire || ac_t == 1 || ac_t != GetPlayerTeam(ac_i))
+						if(!ac_VehFriendlyFire || ac_t == NO_TEAM || ac_t != GetPlayerTeam(ac_i)) - old
 						{
 							ac_t = GetVehicleModel(hitid);
 							new Float:ac_wX, Float:ac_wY, Float:ac_wZ;
