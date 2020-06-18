@@ -8122,7 +8122,7 @@ ac_fpublic ac_Timer(playerid)
 	ac_gpp = GetPlayerPing(playerid);
 	if(ACInfo[playerid][acACAllow][38])
 	{
-		if(ac_gpp > AC_MAX_PING && ac_gpp != 65535)
+		if((ac_gpp > AC_MAX_PING && ac_gpp != 65535) && !GetPVarInt(playerid, "IsDownloadingContent"))
 		{
 			if(++ACInfo[playerid][acCheatCount][0] > AC_MAX_PING_WARNINGS)
 			{
