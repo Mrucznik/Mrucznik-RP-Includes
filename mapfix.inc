@@ -612,14 +612,14 @@ CreateMapFixObjects()
 		MapFixObjects[282] = mf_CreateObject(3117, 2532.0, -1681.1, 1016.2, 0.0, 89.0, 90.0, 3.0);
 		MapFixObjects[283] = mf_CreateObject(3117, 2532.0, -1681.1, 1016.2, 0.0, 89.0, 270.0, 3.0);
 	#endif
-	#if !defined DISABLE_MAPFIX_PLACE_74 //by Apec, 0.3e objects are used
+	/*#if !defined DISABLE_MAPFIX_PLACE_74 //by Apec, 0.3e objects are used
 		MapFixObjects[284] = mf_CreateObject(19464, 293.1319, -1616.1232, 34.7051, 0.0, 0.0, 80.0, 14.0);
 		mf_SetObjectMaterial(MapFixObjects[284], 0, 0, "none", "none", 0);
 		MapFixObjects[285] = mf_CreateObject(19464, 287.3273, -1615.127, 34.7051, 0.0, 0.0, 80.0, 14.0);
 		mf_SetObjectMaterial(MapFixObjects[285], 0, 0, "none", "none", 0);
 		MapFixObjects[286] = mf_CreateObject(19464, 281.4706, -1614.0808, 34.7051, 0.0, 0.0, 80.0, 14.0);
 		mf_SetObjectMaterial(MapFixObjects[286], 0, 0, "none", "none", 0);
-	#endif
+	#endif*/ 
 	#if !defined DISABLE_MAPFIX_PLACE_75
 		MapFixObjects[287] = mf_CreateObject(5020, 1861.7, 1363.3, 55.8, 0.0, 0.0, 90.0, 4.0);
 		MapFixObjects[288] = mf_CreateObject(5020, 1907.2, 1298.8, 55.8, 0.0, 0.0, 180.0, 4.0);
