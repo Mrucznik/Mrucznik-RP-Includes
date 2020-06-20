@@ -109,8 +109,8 @@ public systempozarow_OnPlayerUpdate(playerid)
 								DestroyObject(SmokeObj[i]);
 							}
 			    		    DeleteFire(i);
-			    		    SendFamilyMessage(4, 0xFFFFFFAA, "--------[Emergency Rescue Service]--------");
-    						SendFamilyMessage(4, 0xAA3333AA, "[RADIO] Centrala do ERS: Po¿ar zosta³‚ ugaszony!");
+			    		    SendFamilyMessage(4, 0xFFFFFFAA, "--------[Los Santos Rescue Service]--------");
+    						SendFamilyMessage(4, 0xAA3333AA, "[RADIO] Centrala do LSRS: Po¿ar zosta³‚ ugaszony!");
     						SendFamilyMessage(4, 0x33AA33AA, "[ERS] Do sejfu frakcji wp³ywa 80 000$! [ERS]");
 			    		    Sejf_Add(4, 80000);
 							CallRemoteFunction("OnFireDeath", "dd", i, playerid);
@@ -150,8 +150,8 @@ public systempozarow_OnPlayerUpdate(playerid)
 								DestroyObject(SmokeObj[i]);
 							}
 			    		    DeleteFire(i);
-			    		    SendFamilyMessage(4, 0xFFFFFFAA, "--------[Emergency Rescue Service]--------");
-    						SendFamilyMessage(4, 0xAA3333AA, "[RADIO] Centrala do ERS: Po¿ar zosta³‚ ugaszony!");
+			    		    SendFamilyMessage(4, 0xFFFFFFAA, "--------[Los Santos Rescue Service]--------");
+    						SendFamilyMessage(4, 0xAA3333AA, "[RADIO] Centrala do LSRS: Po¿ar zosta³‚ ugaszony!");
     						SendFamilyMessage(4, 0x33AA33AA, "[ERS] Do sejfu frakcji wp³ywa 80 000$! [ERS]");
 			    		    Sejf_Add(4, 80000);
 							CallRemoteFunction("OnFireDeath", "dd", i, playerid);
@@ -195,8 +195,8 @@ public systempozarow_OnPlayerUpdate(playerid)
 								DestroyObject(SmokeObj[i]);
 							}
 			    		    DeleteFire(i);
-			    		    SendFamilyMessage(4, 0xFFFFFFAA, "--------[Emergency Rescue Service]--------");
-    						SendFamilyMessage(4, 0xAA3333AA, "[RADIO] Centrala do ERS: Po¿ar zosta³‚ ugaszony!");
+			    		    SendFamilyMessage(4, 0xFFFFFFAA, "--------[Los Santos Rescue Service]--------");
+    						SendFamilyMessage(4, 0xAA3333AA, "[RADIO] Centrala do LSRS: Po¿ar zosta³‚ ugaszony!");
     						SendFamilyMessage(4, 0x33AA33AA, "[ERS] Do sejfu frakcji wp³ywa 80 000$! [ERS]");
 			    		    Sejf_Add(4, 80000);
 							CallRemoteFunction("OnFireDeath", "dd", i, playerid);
