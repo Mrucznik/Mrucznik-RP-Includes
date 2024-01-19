@@ -1298,6 +1298,10 @@ stock Prev_ShowPlayerDialog(playerid, dialogid, style, caption[], info[], button
 	*/
 	Prev_UpdateListitems(playerid, 0, 0, Prev@PlayerDialogNumListitems[playerid]);
 
+	// INFO: Wymuszamy `ShowPlayerDialog` ¿eby `fixes.inc` przepuœci³o `OnDialogResponse`
+	// Gracz nic nie widzi przez ujemny styl dialogu
+	ShowPlayerDialog(playerid, dialogid, -1, "", "", "", "");
+
 	return SelectTextDraw(playerid, DIALOG_PREVIEW_SELECT_COLOR);
 }
 #if defined _ALS_ShowPlayerDialog
