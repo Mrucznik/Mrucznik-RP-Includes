@@ -24,10 +24,10 @@ stock CA_auto_CreateDynamicObject(modelid, Float:x, Float:y, Float:z, Float:rx, 
     new dynamic_object_id = CreateDynamicObject(modelid, x, y, z, rx, ry, rz, worldid, interiorid, playerid, streamdistance, drawdistance, areaid, priority);
     if(dynamic_object_id < MAX_DYNAMIC_OBJECTS)
     {
-        DynamicObjectIDToColID[dynamic_object_id] = CA_CreateObject(modelid, x, y, z, rx, ry, rz, true);
-        if(DynamicObjectIDToColID[dynamic_object_id] == 65535)
+        new new_collision_index = CA_CreateObject(modelid, x, y, z, rx, ry, rz, true);
+        if(new_collision_index != 65535 || (CA_IsValidObject(new_collision_index) == 1 && DynamicObjectIDToColID[new_collision_index] == -1))
         {
-            DynamicObjectIDToColID[dynamic_object_id] = -1;
+            DynamicObjectIDToColID[dynamic_object_id] = new_collision_index;
         }
     }
     else
