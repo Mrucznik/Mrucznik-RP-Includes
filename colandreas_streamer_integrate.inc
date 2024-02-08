@@ -25,6 +25,10 @@ stock CA_auto_CreateDynamicObject(modelid, Float:x, Float:y, Float:z, Float:rx, 
     if(dynamic_object_id < MAX_DYNAMIC_OBJECTS)
     {
         DynamicObjectIDToColID[dynamic_object_id] = CA_CreateObject(modelid, x, y, z, rx, ry, rz, true);
+        if(DynamicObjectIDToColID[dynamic_object_id] == 65535)
+        {
+            DynamicObjectIDToColID[dynamic_object_id] = -1;
+        }
     }
     else
     {
@@ -100,8 +104,8 @@ hook OnDynamicObjectMoved(objectid)
         new Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz;
         GetDynamicObjectPos(objectid, x, y, z);
         GetDynamicObjectRot(objectid, rx, ry, rz);
-        CA_SetObjectPos(objectid, x, y, z);
-        CA_SetObjectRot(objectid, rx, ry, rz);
+        CA_SetObjectPos(DynamicObjectIDToColID[objectid], x, y, z);
+        CA_SetObjectRot(DynamicObjectIDToColID[objectid], rx, ry, rz);
     }
 
     return 1;
