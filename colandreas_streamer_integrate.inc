@@ -50,11 +50,12 @@ stock CA_auto_CreateDynamicObject(modelid, Float:x, Float:y, Float:z, Float:rx, 
 stock CA_auto_DestroyDynamicObject(STREAMER_TAG_OBJECT:objectid)
 {
     DestroyDynamicObject(objectid);
-    if(DynamicObjectIDToColID[objectid] != -1)
+    new collision_id = DynamicObjectIDToColID[objectid];
+    if(collision_id != -1)
     {
-        CA_DestroyObject(DynamicObjectIDToColID[objectid]);
+        CA_DestroyObject(collision_id);
         DynamicObjectIDToColID[objectid] = -1;
-        ColIDToDynamicObjectID[new_collision_index] = -1;
+        ColIDToDynamicObjectID[collision_id] = -1;
     }
 }
 
