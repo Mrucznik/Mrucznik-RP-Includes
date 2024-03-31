@@ -14,9 +14,10 @@
 
 #include <YSI_Coding\y_hooks>
 
-#define MAX_DYNAMIC_OBJECTS 1000000
+#define MAX_DYNAMIC_OBJECTS 2500000
 
-static stock DynamicObjectIDToColID[MAX_DYNAMIC_OBJECTS] = {-1, ...};
+stock DynamicObjectIDToColID[MAX_DYNAMIC_OBJECTS] = {-1, ...};
+stock ColIDToDynamicObjectID[MAX_DYNAMIC_OBJECTS] = {-1, ...};
 
 
 stock CA_auto_CreateDynamicObject(modelid, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz, worldid = -1, interiorid = -1, playerid = -1, Float:streamdistance = STREAMER_OBJECT_SD, Float:drawdistance = STREAMER_OBJECT_DD, STREAMER_TAG_AREA:areaid = STREAMER_TAG_AREA:-1, priority = 0)
@@ -28,6 +29,7 @@ stock CA_auto_CreateDynamicObject(modelid, Float:x, Float:y, Float:z, Float:rx, 
         if(new_collision_index != 65535 || (CA_IsValidObject(new_collision_index) == 1 && DynamicObjectIDToColID[new_collision_index] == -1))
         {
             DynamicObjectIDToColID[dynamic_object_id] = new_collision_index;
+            ColIDToDynamicObjectID[new_collision_index] = dynamic_object_id;
         }
     }
     else
@@ -52,6 +54,7 @@ stock CA_auto_DestroyDynamicObject(STREAMER_TAG_OBJECT:objectid)
     {
         CA_DestroyObject(DynamicObjectIDToColID[objectid]);
         DynamicObjectIDToColID[objectid] = -1;
+        ColIDToDynamicObjectID[new_collision_index] = -1;
     }
 }
 
