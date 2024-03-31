@@ -94,7 +94,7 @@ static stock is_bad(Float:val)
 
 stock GetVehicleMatricesRot(vehicleid, Float:m1[], Float:m2[], Float:m3[])
 {
-    if(!VehicleMatricesFuncInit(m1, m2, m3))
+    if(!VehicleMatricesFuncInit())
     {
         return 0;
     }
@@ -110,7 +110,7 @@ stock GetVehicleMatricesRot(vehicleid, Float:m1[], Float:m2[], Float:m3[])
 
 stock SetVehicleMatricesRot(vehicleid, Float:m1[], Float:m2[], Float:m3[])
 {
-    if(!VehicleMatricesFuncInit(m1, m2, m3))
+    if(!VehicleMatricesFuncInit())
     {
         return 0;
     }
