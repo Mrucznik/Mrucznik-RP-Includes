@@ -14,8 +14,14 @@
 
 #include <YSI_Coding\y_hooks>
 
-#define MAX_DYNAMIC_OBJECTS 2500000
-#define MAX_CA_OBJECTS 2500000
+#if defined MAX_DYNAMIC_OBJECTS
+	#if MAX_DYNAMIC_OBJECTS > 50000
+		#error [ColAndreas] MAX_DYNAMIC_OBJECTS is too high, maximum value is 50000
+	#endif
+#else
+    #define MAX_DYNAMIC_OBJECTS 50000
+#endif
+
 
 stock DynamicObjectIDToColID[MAX_DYNAMIC_OBJECTS] = {-1, ...};
 stock ColIDToDynamicObjectID[MAX_DYNAMIC_OBJECTS] = {-1, ...};
