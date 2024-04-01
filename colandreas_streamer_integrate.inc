@@ -16,7 +16,7 @@
 
 #if defined MAX_DYNAMIC_OBJECTS
 	#if MAX_DYNAMIC_OBJECTS > 50000
-		#error [ColAndreas] MAX_DYNAMIC_OBJECTS is too high, maximum value is 50000
+		#warning [ColAndreas] MAX_DYNAMIC_OBJECTS is too high, maximum value is 50000
 	#endif
 #else
     #define MAX_DYNAMIC_OBJECTS 50000
