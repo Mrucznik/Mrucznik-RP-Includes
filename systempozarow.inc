@@ -104,16 +104,7 @@ public systempozarow_OnPlayerUpdate(playerid)
 						}
 			    		if(FireHealth[i] <= 0 && TotalFires == 1)
 			    		{
-							if(FireSmoke[i] == 1)
-							{
-								DestroyObject(SmokeObj[i]);
-							}
-			    		    DeleteFire(i);
-			    		    SendFamilyMessage(4, 0xFFFFFFAA, "--------[Los Santos Rescue Service]--------");
-    						SendFamilyMessage(4, 0xAA3333AA, "[RADIO] Centrala do LSRS: Po¿ar zosta³‚ ugaszony!");
-    						SendFamilyMessage(4, 0x33AA33AA, "[ERS] Do sejfu frakcji wp³ywa 80 000$! [ERS]");
-			    		    Sejf_Add(4, 80000);
-							CallRemoteFunction("OnFireDeath", "dd", i, playerid);
+			    		    PozarUgaszony(i, playerid);
 			    		}
 					    if(FireHealth[i] <= 0 && TotalFires != 1)
 					    {
@@ -145,16 +136,7 @@ public systempozarow_OnPlayerUpdate(playerid)
 						}
 			    		if(FireHealth[i] <= 0 && TotalFires == 1)
 			    		{
-							if(FireSmoke[i] == 1)
-							{
-								DestroyObject(SmokeObj[i]);
-							}
-			    		    DeleteFire(i);
-			    		    SendFamilyMessage(4, 0xFFFFFFAA, "--------[Los Santos Rescue Service]--------");
-    						SendFamilyMessage(4, 0xAA3333AA, "[RADIO] Centrala do LSRS: Po¿ar zosta³‚ ugaszony!");
-    						SendFamilyMessage(4, 0x33AA33AA, "[ERS] Do sejfu frakcji wp³ywa 80 000$! [ERS]");
-			    		    Sejf_Add(4, 80000);
-							CallRemoteFunction("OnFireDeath", "dd", i, playerid);
+			    		    PozarUgaszony(i, playerid);
 			    		}
 					    else if(FireHealth[i] <= 0)
 					    {
@@ -190,16 +172,7 @@ public systempozarow_OnPlayerUpdate(playerid)
 						}
 			    		if(FireHealth[i] <= 0 && TotalFires == 1)
 			    		{
-							if(FireSmoke[i] == 1)
-							{
-								DestroyObject(SmokeObj[i]);
-							}
-			    		    DeleteFire(i);
-			    		    SendFamilyMessage(4, 0xFFFFFFAA, "--------[Los Santos Rescue Service]--------");
-    						SendFamilyMessage(4, 0xAA3333AA, "[RADIO] Centrala do LSRS: Po¿ar zosta³‚ ugaszony!");
-    						SendFamilyMessage(4, 0x33AA33AA, "[ERS] Do sejfu frakcji wp³ywa 80 000$! [ERS]");
-			    		    Sejf_Add(4, 80000);
-							CallRemoteFunction("OnFireDeath", "dd", i, playerid);
+			    		    PozarUgaszony(i, playerid);
 			    		}
 					    else if(FireHealth[i] <= 0)
 					    {
@@ -216,6 +189,22 @@ public systempozarow_OnPlayerUpdate(playerid)
 		}
 	}
 	return 1;
+}
+
+PozarUgaszony(fireid, playerid)
+{
+	if(FireSmoke[fireid] == 1)
+	{
+		DestroyObject(SmokeObj[fireid]);
+	}
+	DeleteFire(fireid);
+	CallRemoteFunction("OnFireDeath", "dd", fireid, playerid);
+
+	new firePrize = 80000;
+	SendClientMessage(playerid, 0xFFFFFFAA, "--------[Los Santos Rescue Service]--------");
+	SendClientMessage(playerid, 0xAA3333AA, "[RADIO] Centrala do LSRS: Po¿ar zosta³‚ ugaszony!");
+	SendClientMessage(playerid, 0x33AA33AA, "[ERS] Dostajesz 80 000$! [ERS]");
+	DajKase(playerid, firePrize);
 }
 
 
