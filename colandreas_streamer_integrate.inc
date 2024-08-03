@@ -15,11 +15,11 @@
 #include <YSI_Coding\y_hooks>
 
 #if defined MAX_DYNAMIC_OBJECTS
-	#if MAX_DYNAMIC_OBJECTS > 50000
-		#warning [ColAndreas] MAX_DYNAMIC_OBJECTS is too high, maximum value is 50000
+	#if MAX_DYNAMIC_OBJECTS > 100000
+		#warning [ColAndreas] MAX_DYNAMIC_OBJECTS is too high, maximum value is 100000
 	#endif
 #else
-    #define MAX_DYNAMIC_OBJECTS 50000
+    #define MAX_DYNAMIC_OBJECTS 100000
 #endif
 
 
