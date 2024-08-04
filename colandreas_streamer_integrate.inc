@@ -26,6 +26,33 @@
 stock DynamicObjectIDToColID[MAX_DYNAMIC_OBJECTS] = {-1, ...};
 stock ColIDToDynamicObjectID[MAX_DYNAMIC_OBJECTS] = {-1, ...};
 
+static i = 0;
+stock CA_auto_CreateDynamicObjectVC(modelid, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz, worldid = -1, interiorid = -1, playerid = -1, Float:streamdistance = STREAMER_OBJECT_SD, Float:drawdistance = STREAMER_OBJECT_DD, STREAMER_TAG_AREA:areaid = STREAMER_TAG_AREA:-1, priority = 0)
+{
+    new dynamic_object_id = CreateDynamicObject(modelid, x, y, z, rx, ry, rz, worldid, interiorid, playerid, streamdistance, drawdistance, areaid, priority);
+    if(dynamic_object_id < MAX_DYNAMIC_OBJECTS && dynamic_object_id != -1)
+    {
+        new new_collision_index = CA_CreateObject(modelid, x, y, z, rx, ry, rz, true);
+        if(new_collision_index != -1)
+        {
+            if(new_collision_index != 65535 || (CA_IsValidObject(new_collision_index) == 1 && DynamicObjectIDToColID[new_collision_index] == -1))
+            {
+                DynamicObjectIDToColID[dynamic_object_id] = new_collision_index;
+                ColIDToDynamicObjectID[new_collision_index] = dynamic_object_id;
+            }
+        }
+        else
+        {
+            printf("colandreas-auto-streamer.inc: WARNING - vc object %d, model %d has no collision", i++, modelid);
+        }
+    }
+    else
+    {
+        printf("colandreas-auto-streamer.inc: WARNING - dynamic_object_id >= MAX_DYNAMIC_OBJECTS!");
+    }
+    
+    return dynamic_object_id;
+}
 
 stock CA_auto_CreateDynamicObject(modelid, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz, worldid = -1, interiorid = -1, playerid = -1, Float:streamdistance = STREAMER_OBJECT_SD, Float:drawdistance = STREAMER_OBJECT_DD, STREAMER_TAG_AREA:areaid = STREAMER_TAG_AREA:-1, priority = 0)
 {
