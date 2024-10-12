@@ -112,6 +112,7 @@ public systempozarow_OnPlayerUpdate(playerid)
 							{
 								DestroyObject(SmokeObj[i]);
 							}
+							OgienUgaszony(playerid);
 							DeleteFire(i);
 							CallRemoteFunction("OnFireDeath", "dd", i, playerid);
 						}
