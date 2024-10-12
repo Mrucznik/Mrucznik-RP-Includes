@@ -207,8 +207,6 @@ PozarUgaszony(fireid, playerid)
 	DeleteFire(fireid);
 	CallRemoteFunction("OnFireDeath", "dd", fireid, playerid);
 
-	SendClientMessage(playerid, 0xFFFFFFAA, "--------[Los Santos Rescue Service]--------");
-	SendClientMessage(playerid, 0xAA3333AA, "[RADIO] Centrala do LSRS: Po¿ar zosta³‚ ugaszony!");
 	SendClientMessage(playerid, 0x33AA33AA, "[ERS] Dostajesz 5 000$! [ERS]");
 	DajKase(playerid, 5000);
 }
