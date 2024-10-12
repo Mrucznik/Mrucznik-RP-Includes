@@ -7,12 +7,12 @@
 forward systempozarow_OnPlayerUpdate(playerid);
 forward systempozarow_init();
 forward OnFire();
+forward OnFireDeath(fireid, playerid);
 
 public systempozarow_init()
 {
-		SetTimer("OnFire", 1000, 1);
+	SetTimer("OnFire", 1000, 1);
 }	
-
 
 new
     FireObj[MaxFire],
