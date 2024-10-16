@@ -209,6 +209,13 @@ PozarUgaszony(fireid, playerid)
 
 	SendClientMessage(playerid, 0x33AA33AA, "[ERS] Dostajesz 5 000$! [ERS]");
 	DajKase(playerid, 5000);
+
+	SendFamilyMessage(FRAC_ERS, 0xFFFFFFAA, "--------[Los Santos Rescue Service]--------");
+	SendFamilyMessage(FRAC_ERS, 0xAA3333AA, "[RADIO] Centrala do LSRS: Po¿ar zosta³‚ ugaszony!");
+
+	SendJobMessage(JOB_MEDIC, 0xFFFFFFAA, "--------[Los Santos Rescue Service]--------");
+	SendJobMessage(JOB_MEDIC, 0xAA3333AA, "[RADIO] Centrala do LSRS: Po¿ar zosta³‚ ugaszony!");
+	ActiveFire = -1;
 }
 
 
